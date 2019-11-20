@@ -31,7 +31,7 @@ class Rating
 
     public function isValid() 
     {
-        if ($user && $value && $value > 0 && $value <= 5) {
+        if ($this->user && $this->value && $this->value > 0 && $this->value <= 5) {
             return true;
         }
         return false;
