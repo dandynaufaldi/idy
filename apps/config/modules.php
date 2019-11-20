@@ -7,7 +7,7 @@ return array(
         'apiControllerNamespace' => 'Idy\Idea\Controllers\Api',
         'className' => 'Idy\Idea\Module',
         'path' => APP_PATH . '/modules/idea/Module.php',
-        'defaultRouting' => true,
+        'defaultRouting' => false,
         'defaultController' => 'idea',
         'defaultAction' => 'index'
     ],
