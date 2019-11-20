@@ -13,4 +13,14 @@ class Author
         $this->email = $email;
     }
 
+    public function name()
+    {
+        return $this->name;
+    }
+
+    public function email()
+    {
+        return $this->email;
+    }
+
 }
