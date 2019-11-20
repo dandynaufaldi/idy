@@ -26,7 +26,7 @@ CREATE TABLE `ideas` (
   `id` varchar(36) NOT NULL,
   `title` varchar(45) NOT NULL,
   `description` varchar(200) NOT NULL,
-  `votes` int(11) DEFAULT NULL,
+  `votes` int(11) DEFAULT '0',
   `author_name` varchar(45) NOT NULL,
   `author_email` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
@@ -60,4 +60,4 @@ CREATE TABLE `ratings` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-11-20 17:27:55
+-- Dump completed on 2019-11-20 19:28:30
