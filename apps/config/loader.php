@@ -2,6 +2,10 @@
 
 $loader = new \Phalcon\Loader();
 
+$loader->registerDirs(array(
+	APP_PATH . '/common/exceptions/'
+));
+
 /**
   * Load library namespace
   */
@@ -16,7 +20,9 @@ $loader->registerNamespaces(array(
 	/**
 	 * Load common classes
 	 */
-	'Idy\Common\Events' => APP_PATH . '/common/events',
-));
+	'Idy\Common\Events' => APP_PATH . '/common/events/',
+	'Idy\Common\Exceptions' => APP_PATH . '/common/exceptions/'
+), true);
+
 
 $loader->register();

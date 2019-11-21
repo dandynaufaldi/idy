@@ -2,10 +2,7 @@
 
 namespace Idy\Idea\Infrastructure;
 
-use Exception;
-use Phalcon\Di;
 use Phalcon\Db\Column;
-
 use Idy\Common\Exceptions\ResourceNotFoundException;
 use Idy\Idea\Domain\Model\Idea;
 use Idy\Idea\Domain\Model\Author;
@@ -27,7 +24,7 @@ class SqlIdeaRepository implements IdeaRepository
     {
         $query = "
         SELECT id, title, description, votes, author_name, author_email 
-        FROM `ideas `
+        FROM `ideas`
         WHERE id=:id
         ";
         $statement = $this->db->prepare($query);
