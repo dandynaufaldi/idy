@@ -86,9 +86,12 @@ class Idea
 
     public function averageRating()
     {
-        $numberOfRatings = count($this->rating);
         $totalRatings = 0;
-
+        $numberOfRatings = count($this->ratings);
+        if ($numberOfRatings == 0) {
+            return 0.0;
+        }
+        
         foreach ($this->ratings as $rating) {
             $totalRatings += $rating->value();
         }

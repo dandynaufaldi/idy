@@ -1,5 +1,6 @@
 <?php
 
+use Idy\Idea\Application\ViewAllIdeasService;
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Engine\Volt;
 use Idy\Idea\Infrastructure\SqlIdeaRepository;
@@ -8,7 +9,7 @@ $di['voltServiceMail'] = function($view) use ($di) {
 
     $config = $di->get('config');
 
-    $volt = new \Phalcon\Mvc\View\Engine\Volt($view, $di);
+    $volt = new Volt($view, $di);
     if (!is_dir($config->mail->cacheDir)) {
         mkdir($config->mail->cacheDir);
     }
@@ -54,4 +55,10 @@ $di->setShared('sql_idea_repository', function() use ($di) {
     $repo = new SqlIdeaRepository($di);
 
     return $repo;
+});
+
+$di->set('view_all_ideas_service', function() use ($di){
+    $repo = $di->get('sql_idea_repository');
+    $service = new ViewAllIdeasService($repo);
+    return $service;
 });
