@@ -1,5 +1,6 @@
 <?php
 
+use Idy\Idea\Application\CreateNewIdeaService;
 use Idy\Idea\Application\ViewAllIdeasService;
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Engine\Volt;
@@ -60,5 +61,11 @@ $di->setShared('sql_idea_repository', function() use ($di) {
 $di->set('view_all_ideas_service', function() use ($di){
     $repo = $di->get('sql_idea_repository');
     $service = new ViewAllIdeasService($repo);
+    return $service;
+});
+
+$di->set('create_new_idea_service', function() use ($di){
+    $repo = $di->get('sql_idea_repository');
+    $service = new CreateNewIdeaService($repo);
     return $service;
 });

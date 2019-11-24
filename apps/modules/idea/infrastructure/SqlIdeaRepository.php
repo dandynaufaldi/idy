@@ -160,28 +160,20 @@ class SqlIdeaRepository implements IdeaRepository
 
     private function create(Idea $idea)
     {
-        $query = "
-        INSERT INTO `ideas`
-        (id, title, description, votes, author_name, author_email)
-        VALUES (:id, :title, :description, :votes, :author_name, :author_email)
-        ";
-        $statement = $this->db->prepare($query);
+        $statement = $this->statements[self::insertIdea];
         $params = [
             'id' => $idea->id()->id(),
             'title' => $idea->title(),
             'description' => $idea->description(),
             'votes' => $idea->votes(),
             'author_name' => $idea->author()->name(),
-            'author_email' => $idea->author->email()
+            'author_email' => $idea->author()->email()
         ];
-        $types = [
-            'id' => Column::BIND_PARAM_STR,
-            'title' => Column::BIND_PARAM_STR,
-            'description' => Column::BIND_PARAM_STR,
-            'votes' => Column::BIND_PARAM_INT,
-            'author_name' => Column::BIND_PARAM_STR,
-            'author_email' => Column::BIND_PARAM_STR,
-        ];
+        $bindTypes = $this->bindTypes[self::insertIdea];
+        $success = $this->db->executePrepared($statement, $params, $bindTypes);
+        if (!$success) {
+            throw new Exception("Failed to create new Idea");
+        }
     }
 
     private function update(Idea $existingIdea, Idea $updatedIdea)

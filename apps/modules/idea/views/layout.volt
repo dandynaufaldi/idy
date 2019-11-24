@@ -11,13 +11,21 @@
     <!-- Bootstrap core CSS -->
     <link href="{{ url('assets/css/bootstrap.min.css') }}" rel="stylesheet">
 
-    {% block styles %}{% endblock %}
+    <style>
+    body{
+            font-family:arial,sans-serif;
+            font-size:100%;
+            margin:5em;
+    }
+    </style>
+    {% block styles %}
+    {% endblock %}
 
 </head>
 <body>
     
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <a class="navbar-brand" href="#">Idy</a>
+    <a class="navbar-brand" href="{{ url() }}">Idy</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>

@@ -96,8 +96,8 @@
 {% endblock %}
 
 {% block content %}
-
     <ul>
+    {{ flashSession.output() }}
     {% if ideas is defined %}
         {% for idea in ideas %}
         <li>
