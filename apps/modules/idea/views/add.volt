@@ -27,6 +27,7 @@
         {{ text_field('author_email', 'class': 'form-control', 'required': true, 'placeholder': 'e.g. john.doe@mail.com') }}
     </div>
     {{ submit_button('Submit', 'type': 'button', 'class': 'btn btn-primary') }}
+{{ end_form() }}
 {% endblock %}
 
 {% block scripts %}

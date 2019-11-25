@@ -87,7 +87,8 @@ class SqlIdeaRepository implements IdeaRepository
                 'description' => Column::BIND_PARAM_STR, 
                 'votes' => Column::BIND_PARAM_INT,
                 'author_name' => Column::BIND_PARAM_STR,
-                'author_email' => Column::BIND_PARAM_STR
+                'author_email' => Column::BIND_PARAM_STR,
+                'id' => Column::BIND_PARAM_STR,
             ]
         ];
     }
@@ -100,7 +101,6 @@ class SqlIdeaRepository implements IdeaRepository
         ];
         $bindTypes = $this->bindTypes[self::ideaById];
         $idea = $this->db->executePrepared($statement, $params, $bindTypes);
-        
         if ($idea->rowCount() == 0)
         {
             throw new ResourceNotFoundException("Idea with ID ".$id->id()." not exist");
@@ -165,12 +165,12 @@ class SqlIdeaRepository implements IdeaRepository
     {
         $statement = $this->statements[self::updateIdea];
         $params = [
-            'id' => $idea->id()->id(),
             'title' => $idea->title(),
             'description' => $idea->description(), 
             'votes' => $idea->votes(),
             'author_name' => $idea->author()->name(),
-            'author_email' => $idea->author()->email()
+            'author_email' => $idea->author()->email(),
+            'id' => $idea->id()->id()
         ];
         $bindTypes = $this->bindTypes[self::updateIdea];
         $success = $this->db->executePrepared($statement, $params, $bindTypes);
