@@ -106,7 +106,7 @@
                 <div class="rating">Ratings: {{ idea.averageRating() }} <a href="{{ url('idea/rate/') }}{{ idea.id().id() }}">Rate</a></div>
                 <div class="rating">Votes: {{ idea.votes() }} 
                     {{ form('idea/vote', 'method': 'POST')}}
-                        {{ text_field('idea_id', 'type': 'hidden', 'value': idea.id().id(), 'style' : 'display:none' ) }}
+                        {{ hidden_field('idea_id', 'value': idea.id().id() ) }}
                         {{ submit_button('Vote', 'type': 'button', 'class': 'btn btn-primary') }}
                     {{ end_form() }}
                 </div>

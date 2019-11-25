@@ -1,11 +1,13 @@
 <?php
 
 use Idy\Idea\Application\CreateNewIdeaService;
+use Idy\Idea\Application\RateIdeaService;
 use Idy\Idea\Application\ViewAllIdeasService;
 use Idy\Idea\Application\VoteIdeaService;
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Engine\Volt;
 use Idy\Idea\Infrastructure\SqlIdeaRepository;
+use Idy\Idea\Infrastructure\SqlRatingRepository;
 
 $di['voltServiceMail'] = function($view) use ($di) {
 
@@ -55,7 +57,11 @@ $di['db'] = function () use ($di) {
 
 $di->setShared('sql_idea_repository', function() use ($di) {
     $repo = new SqlIdeaRepository($di);
+    return $repo;
+});
 
+$di->setShared('sql_rating_repository', function() use ($di) {
+    $repo = new SqlRatingRepository($di);
     return $repo;
 });
 
@@ -74,5 +80,12 @@ $di->set('create_new_idea_service', function() use ($di){
 $di->set('vote_idea_service', function() use ($di){
     $repo = $di->get('sql_idea_repository');
     $service = new VoteIdeaService($repo);
+    return $service;
+});
+
+$di->set('rate_idea_service', function() use ($di){
+    $ideaRepo = $di->get('sql_idea_repository');
+    $ratingRepo = $di->get('sql_rating_repository');
+    $service = new RateIdeaService($ideaRepo, $ratingRepo);
     return $service;
 });

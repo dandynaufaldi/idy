@@ -22,7 +22,6 @@ class SqlIdeaRepository implements IdeaRepository
     const ideaById = "ideaById";
     const ratingsByIdeaId = "ratingsByIdeaId";
     const insertIdea = "insertIdea";
-    const insertRating = "insertRating";
     const allIdeas = "allIdeas";
     const allRatings = "allRatings";
     const updateIdea = "updateIdea";
@@ -43,10 +42,6 @@ class SqlIdeaRepository implements IdeaRepository
             self::insertIdea => $this->db->prepare(
                 "INSERT INTO `ideas` (id, title, description, votes, author_name, author_email) 
                 VALUES (:id, :title, :description, :votes, :author_name, :author_email)"
-            ),
-            self::insertRating => $this->db->prepare(
-                "INSERT INTO `ratings` (idea_id, name, value)
-                VALUES (:idea_id, :name, :value)"
             ),
             self::allIdeas => $this->db->prepare(
                 "SELECT id, title, description, author_name, author_email, votes FROM `ideas`"
@@ -74,11 +69,6 @@ class SqlIdeaRepository implements IdeaRepository
                 'votes' => Column::BIND_PARAM_INT,
                 'author_name' => Column::BIND_PARAM_STR,
                 'author_email' => Column::BIND_PARAM_STR
-            ],
-            self::insertRating => [
-                'idea_id' => Column::BIND_PARAM_STR,
-                'name' => Column::BIND_PARAM_STR,
-                'value' => Column::BIND_PARAM_INT
             ],
             self::allIdeas => [],
             self::allRatings => [],

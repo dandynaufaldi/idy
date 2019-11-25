@@ -3,8 +3,10 @@
 namespace Idy\Idea\Controllers\Web;
 
 use Idy\Idea\Application\CreateNewIdeaRequest;
+use Idy\Idea\Application\RateIdeaRequest;
 use Idy\Idea\Application\VoteIdeaRequest;
 use Idy\Idea\Controllers\Validators\CreateNewIdeaValidator;
+use Idy\Idea\Controllers\Validators\RateIdeaValidator;
 use Phalcon\Mvc\Controller;
 
 class IdeaController extends Controller
@@ -12,12 +14,14 @@ class IdeaController extends Controller
     private $allIdeasService;
     private $createNewIdeaService;
     private $voteIdeaService;
+    private $rateIdeaService;
 
     public function initialize()
     {
         $this->allIdeasService = $this->di->get('view_all_ideas_service');
         $this->createNewIdeaService = $this->di->get('create_new_idea_service');
         $this->voteIdeaService = $this->di->get('vote_idea_service');
+        $this->rateIdeaService = $this->di->get('rate_idea_service');
     }
 
     public function indexAction()
@@ -83,9 +87,36 @@ class IdeaController extends Controller
         return $this->response->redirect('');
     }
 
+    public function rateViewAction()
+    {   
+        $ideaId = $this->dispatcher->getParam('id');
+        $this->view->idea_id = $ideaId;
+        return $this->view->pick('rate');
+    }
+
     public function rateAction()
     {
-        return $this->view->pick('rate');
+        $validator = new RateIdeaValidator();
+        $messages = $validator->validate($_POST);
+        if (count($messages)) {
+            foreach ($messages as $message) {
+                $this->flashSession->error($message->getMessage());
+            }
+            return $this->response->redirect($this->request->getHTTPReferer());
+        }
+        $ideaId = $this->request->getPost('id');
+        $name = $this->request->getPost('name');
+        $value = (int)$this->request->getPost('value');
+
+        $request = new RateIdeaRequest($ideaId, $name, $value);
+        $response = $this->rateIdeaService->execute($request);
+        $error = $response->error();
+        if ($error) {
+            $this->flashSession->error($error);
+            return $this->response->redirect($this->request->getHTTPReferer());
+        }
+        $this->flashSession->success($response->message());
+        return $this->response->redirect('');
     }
 
 }

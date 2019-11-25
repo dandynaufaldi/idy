@@ -2,6 +2,10 @@
 
 namespace Idy\Idea\Domain\Model;
 
+use Idy\Common\Events\DomainEventPublisher;
+use Idy\Common\Exceptions\DuplicateItemException;
+use Idy\Common\Exceptions\InvalidArgumentException;
+
 class Idea
 {
     private $id;
@@ -56,27 +60,27 @@ class Idea
     public function addRating($user, $ratingValue)
     {
         $newRating = new Rating($user, $ratingValue);
-
-        if ($newRating->isValid()) {
-            $exist = false;
-            foreach ($this->ratings as $existingRating) {
-                if ($existingRating->equals($newRating)) {
-                    $exist = true;
-                }
-            }
-
-            if (!$exist) {
-                array_push($this->ratings, $newRating);
-            } else {
-                throw new Exception('Author ' . $newRating->author() . ' has given a rating.');
-            }
-
-            DomainEventPublisher::instance()->publish(
-                new IdeaRated($this->author->name(), $this->author->email(), 
-                    $this->title, $ratingValue)
-            );
-
+        if (!$newRating->isValid()) {
+            throw new InvalidArgumentException('Rating value exceed boundary');
         }
+        $exist = false;
+        foreach ($this->ratings as $existingRating) {
+            if ($existingRating->equals($newRating)) {
+                $exist = true;
+            }
+        }
+
+        if (!$exist) {
+            array_push($this->ratings, $newRating);
+        } else {
+            throw new DuplicateItemException('Author ' . $newRating->author() . ' has given a rating.');
+        }
+
+        DomainEventPublisher::instance()->publish(
+            new IdeaRated($this->author->name(), $this->author->email(), 
+                $this->title, $ratingValue)
+        );
+
     }
 
     public function vote()
