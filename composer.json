@@ -4,6 +4,7 @@
         "ramsey/uuid": "^3.8"
     },
     "require-dev": {
-        "phalcon/ide-stubs": "^3.4"
+        "phalcon/ide-stubs": "^3.4",
+        "phalcon/dd": "^1.1"
     }
 }

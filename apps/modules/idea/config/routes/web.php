@@ -16,7 +16,7 @@ $router->add('/idea/add', [
     'action' => 'add'
 ]);
 
-$router->addPost('/idea/vote/:params', [
+$router->addPost('/idea/vote', [
     'namespace' => $namespace,
     'module' => 'idea',
     'controller' => 'idea',

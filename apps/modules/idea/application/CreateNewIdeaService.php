@@ -30,7 +30,7 @@ class CreateNewIdeaService
             $this->ideaRepository->save($idea);
             return new CreateNewIdeaResponse();
         } catch (Exception $e) {
-            return new CreateNewIdeaResponse($e->getMessage());
+            return new CreateNewIdeaResponse('Failed to create new idea');
         }
         
     }

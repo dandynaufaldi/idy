@@ -56,7 +56,7 @@ class SqlIdeaRepository implements IdeaRepository
             ),
             self::updateIdea => $this->db->prepare(
                 "UPDATE `ideas`
-                SET title=:title, description=:description, votes=:votes, author_name=:author_name, author_email:=author_email
+                SET title=:title, description=:description, votes=:votes, author_name=:author_name, author_email=:author_email
                 WHERE id=:id"
             )
         ];
@@ -83,7 +83,6 @@ class SqlIdeaRepository implements IdeaRepository
             self::allIdeas => [],
             self::allRatings => [],
             self::updateIdea => [
-                'id' => Column::BIND_PARAM_STR,
                 'title' => Column::BIND_PARAM_STR,
                 'description' => Column::BIND_PARAM_STR, 
                 'votes' => Column::BIND_PARAM_INT,
@@ -95,19 +94,12 @@ class SqlIdeaRepository implements IdeaRepository
 
     private function fetchIdeaById(IdeaId $id) : array
     {
-        $query = "
-        SELECT id, title, description, votes, author_name, author_email 
-        FROM `ideas`
-        WHERE id=:id
-        ";
-        $statement = $this->db->prepare($query);
+        $statement = $this->statements[self::ideaById];
         $params = [
             'id' => $id->id()
         ];
-        $types = [
-            'id' => Column::BIND_PARAM_STR
-        ];
-        $idea = $this->db->executePrepared($statement, $params, $types);
+        $bindTypes = $this->bindTypes[self::ideaById];
+        $idea = $this->db->executePrepared($statement, $params, $bindTypes);
         
         if ($idea->rowCount() == 0)
         {
@@ -119,19 +111,12 @@ class SqlIdeaRepository implements IdeaRepository
 
     private function fetchRatingsByIdeaId(IdeaId $id) : array
     {
-        $query = "
-        SELECT name, value
-        FROM `ratings`
-        WHERE idea_id=:idea_id
-        ";
-        $statement = $this->db->prepare($query);
-        $param = [
+        $statement = $this->statements[self::ratingsByIdeaId];
+        $params = [
             'idea_id' => $id->id()
         ];
-        $types = [
-            'idea_id' => Column::BIND_PARAM_STR
-        ];
-        $ratings = $this->db->executePrepared($statement, $param, $types)->fetchAll();
+        $bindTypes = $this->bindTypes[self::ratingsByIdeaId];
+        $ratings = $this->db->executePrepared($statement, $params, $bindTypes)->fetchAll();
         return $ratings;
     }
 
@@ -176,9 +161,22 @@ class SqlIdeaRepository implements IdeaRepository
         }
     }
 
-    private function update(Idea $existingIdea, Idea $updatedIdea)
+    private function update(Idea $idea)
     {
-        throw new Exception("Not implemented");
+        $statement = $this->statements[self::updateIdea];
+        $params = [
+            'id' => $idea->id()->id(),
+            'title' => $idea->title(),
+            'description' => $idea->description(), 
+            'votes' => $idea->votes(),
+            'author_name' => $idea->author()->name(),
+            'author_email' => $idea->author()->email()
+        ];
+        $bindTypes = $this->bindTypes[self::updateIdea];
+        $success = $this->db->executePrepared($statement, $params, $bindTypes);
+        if (!$success) {
+            throw new Exception("Failed update idea");
+        }
     }
 
     public function save(Idea $idea) : void
@@ -186,7 +184,7 @@ class SqlIdeaRepository implements IdeaRepository
         $id = $idea->id();
         try {
             $existingIdea = $this->byId($id);
-            $this->update($existingIdea, $idea);
+            $this->update($idea);
         } catch (ResourceNotFoundException $e) {
             $this->create($idea);
         }

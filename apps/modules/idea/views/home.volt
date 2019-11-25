@@ -11,9 +11,6 @@
             padding:0;
         }
         body{
-            font-family:arial,sans-serif;
-            font-size:100%;
-            margin:3em;
             background:#666;
             color:#fff;
         }
@@ -107,7 +104,11 @@
                 <div class="author">{{ idea.author().name() }}</div>
                 <div class="email">{{ idea.author().email() }}</div>
                 <div class="rating">Ratings: {{ idea.averageRating() }} <a href="{{ url('idea/rate/') }}{{ idea.id().id() }}">Rate</a></div>
-                <div class="rating">Votes: {{ idea.votes() }} <a href="{{ url('idea/vote/') }}{{ idea.id().id() }}">Vote</a></div>
+                <div class="rating">Votes: {{ idea.votes() }} 
+                    {{ form('idea/vote', 'method': 'POST')}}
+                    {{ text_field('idea_id', 'type': 'hidden', 'value': idea.id().id(), 'style' : 'display:none' ) }}
+                    {{ submit_button('Vote', 'type': 'button', 'class': 'btn btn-primary') }}
+                </div>
             </div>
         </li>
         {% endfor %}
