@@ -1,9 +1,12 @@
 <?php
 
+use Idy\Common\Events\DomainEventPublisher;
 use Idy\Idea\Application\CreateNewIdeaService;
 use Idy\Idea\Application\RateIdeaService;
+use Idy\Idea\Application\SendRatingNotificationService;
 use Idy\Idea\Application\ViewAllIdeasService;
 use Idy\Idea\Application\VoteIdeaService;
+use Idy\Idea\Infrastructure\SmtpMailer;
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Engine\Volt;
 use Idy\Idea\Infrastructure\SqlIdeaRepository;
@@ -88,4 +91,17 @@ $di->set('rate_idea_service', function() use ($di){
     $ratingRepo = $di->get('sql_rating_repository');
     $service = new RateIdeaService($ideaRepo, $ratingRepo);
     return $service;
+});
+
+$di->setShared('smtp_mailer', function () use ($di) {
+    $mailer = new SmtpMailer($di);
+    return $mailer;
+});
+
+$di->setShared('send_rating_notif_service', function () use ($di){
+    $mailer = $di->get('smtp_mailer');
+    $sendRatingNotifService = new SendRatingNotificationService(
+        $mailer
+    );
+    return $sendRatingNotifService;
 });

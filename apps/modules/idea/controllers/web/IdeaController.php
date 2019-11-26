@@ -2,6 +2,7 @@
 
 namespace Idy\Idea\Controllers\Web;
 
+use Idy\Common\Events\DomainEventPublisher;
 use Idy\Idea\Application\CreateNewIdeaRequest;
 use Idy\Idea\Application\RateIdeaRequest;
 use Idy\Idea\Application\VoteIdeaRequest;
@@ -15,6 +16,7 @@ class IdeaController extends Controller
     private $createNewIdeaService;
     private $voteIdeaService;
     private $rateIdeaService;
+    private $sendRatingNotifService;
 
     public function initialize()
     {
@@ -22,6 +24,8 @@ class IdeaController extends Controller
         $this->createNewIdeaService = $this->di->get('create_new_idea_service');
         $this->voteIdeaService = $this->di->get('vote_idea_service');
         $this->rateIdeaService = $this->di->get('rate_idea_service');
+        $this->sendRatingNotifService = $this->di->get('send_rating_notif_service');
+        DomainEventPublisher::instance()->subscribe($this->sendRatingNotifService);
     }
 
     public function indexAction()

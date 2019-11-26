@@ -22,6 +22,7 @@ return new Config(
                 'port'      => getenv('IDEA_MAIL_SMTP_PORT'),
                 'username'  => getenv('IDEA_MAIL_SMTP_USERNAME'),
                 'password'  => getenv('IDEA_MAIL_SMTP_PASSWORD'),
+                'encryption' => getenv('IDEA_MAIL_SMTP_ENCRYPTION')
             ],
         ],
     ]

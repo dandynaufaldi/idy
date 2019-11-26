@@ -10,18 +10,15 @@ class IdeaRated implements DomainEvent
     private $email;
     private $title;
     private $rating;
-
     private $occuredOn;
-
-    public function name()
-    {
-        return $this->name;
-    }
 
     public function __construct(
         $name, $email, $title, $rating)
     {
         $this->name = $name;
+        $this->email = $email;
+        $this->title = $title;
+        $this->rating = $rating;
     }
 
     /**
@@ -30,5 +27,25 @@ class IdeaRated implements DomainEvent
     public function occurredOn()
     {
         return $this->occuredOn;
+    }
+
+    public function name()
+    {
+        return $this->name;
+    }
+
+    public function email()
+    {
+        return $this->email;
+    }
+
+    public function title()
+    {
+        return $this->title;
+    }
+
+    public function rating()
+    {
+        return $this->rating;
     }
 }

@@ -1,5 +1,5 @@
 Hi {{ name }},
-
-Your idea #{{ id }} has been rated {{ rating }}.
-
+<br>
+Your idea <b>{{ title }}</b> has been rated {{ rating }}.
+<br>
 Idy
